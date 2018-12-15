@@ -1,6 +1,7 @@
 <?php
 
 use Praxis\I10ManutencaoApiSdk\ApiSdk;
+use Praxis\I10ManutencaoApiSdk\RequestData;
 
 $sdk = new ApiSdk();
 

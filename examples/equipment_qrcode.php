@@ -8,8 +8,8 @@ $alias = 'xpto';
 $login = 'fulano';
 $password = '12345';
 
-$id = 1;
-$endpoint = 'equipments/1000/qr-code';
+$equipmentId = 1;
+$endpoint = sprintf('equipments/%s/qr-code', $equipmentId);
 
 $sdk->login($alias, $login, $password);
 
@@ -17,4 +17,4 @@ $qrCodeResponse = $sdk->show($endpoint, null, [
 	'Accept' => 'text/html'
 ]);
 
-var_dump($qrCodeResponse->toRaw());
+echo $qrCodeResponse->toRaw();

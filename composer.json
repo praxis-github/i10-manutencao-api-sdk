@@ -1,0 +1,39 @@
+{
+    "name": "praxis-github/i10-manutencao-api-sdk",
+    "homepage": "https://github.com/praxis-github/i10-manutencao-api-sdk",
+    "description": "SDK da API do I10 Manutenção",
+    "keywords": ["sdk","api"],
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Praxis",
+            "email": "atendimento@praxis.com.br",
+            "homepage": "https://github.com/praxis-github"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/praxis-github/i10-manutencao-api-sdk/issues"
+    },
+    "require": {
+        "php": ">=5.4",
+        "guzzlehttp/guzzle": "~5.3"        
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0|~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Praxis\\I10ManutencaoApiSdk\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

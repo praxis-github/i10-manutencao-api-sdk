@@ -3,12 +3,13 @@
 namespace Praxis\I10ManutencaoApiSdk;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\GuzzleException;
 
 class ApiSdk
 {
-	private $baseUrl = 'http://gcpmail3.task.com.br/v1/';	
+    private $baseUrl = 'http://gcpmail3.task.com.br/v1/';    
 	private $client = null;
 	private $accessToken = null;
 	private $rawResponse = null;
@@ -32,28 +33,66 @@ class ApiSdk
 				])
 			]);
 		} catch (ClientException $e) {
-			$statusCode = $e->getResponse()->getStatusCode();
+            $statusCode = $e->getResponse()->getStatusCode();
 			
-			if ($statusCode) {
-				throw new UserNotFoundException('User not found');
-			}
+			if ($statusCode === 404) {
+				throw new NotFoundException('User not found');
+            }
+            throw new Exception(sprintf('Error : %s', $e->getMessage()));            
 		}				
 		$content = json_decode($response->getBody()->getContents());
 
+        $this->accessToken = $content->access_token;
+		
+		$this->client = $this->createClient(
+			$this->baseUrl,
+			$this->accessToken
+		);
+
+		return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+    
+    /**
+     * @param string $token
+     * @return I10ManutencaoApiSdk
+     */
+    public function refreshToken($token)
+    {
+        $requestClient = $this->createClient($this->baseUrl);
+
+        try {
+			$response = $requestClient->post('auth/refresh', [
+				'body' => json_encode([					
+                    'token' => $token
+                ])
+			]);
+		} catch (ClientException $e) {
+            throw new \Exception($e->getMessage());            
+		}
+        $content = json_decode($response->getBody()->getContents());
+        
 		$this->accessToken = $content->access_token;
 		
 		$this->client = $this->createClient(
 			$this->baseUrl,
-			$content->access_token
+			$this->accessToken
 		);
 
 		return $this;
-	}
+    }
 
 	/**
 	 * @param string $baseUrl
 	 * @param string $accessToken
-	 * @return \GuzzleHttp\ClientInterface
+	 * @return ClientInterface
 	 */
 	private function createClient($baseUrl = null, $accessToken = null)
 	{
@@ -85,7 +124,7 @@ class ApiSdk
 
 		if ($requestData instanceof RequestData) {
 			$endpoint = sprintf('%s?%s', $endpoint, (string)$requestData);
-		}
+        }        
 		try {
 			$response = $this->client->get(
 				$endpoint,
@@ -97,10 +136,16 @@ class ApiSdk
 						$headers
 					)										
 				]				
-			);	
-		} catch (\Exception $e) {
-		 	
-		}
+            );	
+        } catch (ClientException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();
+
+            if ($statusCode === 401) {                
+                $this->refreshToken($this->accessToken);
+                return $this->index($resource, $requestData, $headers);                
+            }        
+            throw new Exception(sprintf('Error : %s', $e->getMessage()));
+        }    
 		$this->rawResponse = (string)$response->getBody();
 
 		return $this;
@@ -131,8 +176,18 @@ class ApiSdk
 					)
 				]				
 			);	
-		} catch (\Exception $e) {
-		 	
+		} catch (ClientException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();
+
+            if ($statusCode === 404) {
+                throw new NotFoundException('Not found!');
+            }
+
+            if ($statusCode === 401) {                
+                $this->refreshToken($this->accessToken);
+                return $this->show($resource, $id, $headers);
+            }
+            throw new Exception(sprintf('Error : %s', $e->getMessage()));
 		}
 		$this->rawResponse = (string)$response->getBody();
 
@@ -160,8 +215,14 @@ class ApiSdk
 					)
 				]				
 			);	
-		} catch (\Exception $e) {
-			
+		} catch (ClientException $e) {
+			$statusCode = $e->getResponse()->getStatusCode();            
+
+            if ($statusCode === 401) {                
+                $this->refreshToken($this->accessToken);
+                return $this->store($endpoint, $payload, $headers);
+            }
+            throw new Exception(sprintf('Error : %s', $e->getMessage()));
 		}
 		$this->rawResponse = (string)$response->getBody();
 
@@ -195,8 +256,14 @@ class ApiSdk
 					)
 				]				
 			);	
-		} catch (\Exception $e) {
-		 	
+		} catch (ClientException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();            
+
+            if ($statusCode === 401) {                
+                $this->refreshToken($this->accessToken);
+                return $this->update($resource, $id, $payload, $headers);
+            }
+            throw new Exception(sprintf('Error : %s', $e->getMessage()));
 		}
 		$this->rawResponse = (string)$response->getBody();
 
@@ -228,8 +295,13 @@ class ApiSdk
 					)
 				]				
 			);	
-		} catch (\Exception $e) {
-		 	
+		} catch (ClientException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();            
+
+            if ($statusCode === 401) {                
+                $this->refreshToken($this->accessToken);
+                return $this->destroy($resource, $id, $headers);
+            }
 		}
 		$this->rawResponse = (string)$response->getBody();
 

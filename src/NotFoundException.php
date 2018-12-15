@@ -2,6 +2,6 @@
 
 namespace Praxis\I10ManutencaoApiSdk;
 
-class UserNotFoundException extends \Exception
+class NotFoundException extends \Exception
 {    
 }

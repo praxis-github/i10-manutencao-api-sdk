@@ -1,6 +1,8 @@
 <?php
 
-$sdk = new \Praxis\I10ManutencaoApiSdk();
+use Praxis\I10ManutencaoApiSdk\ApiSdk;
+
+$sdk = new ApiSdk();
 
 $alias = 'xpto';
 $login = 'fulano';

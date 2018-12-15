@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\GuzzleException;
 
-class I10ManutencaoApiSdk
+class ApiSdk
 {
 	private $baseUrl = 'http://gcpmail3.task.com.br/v1/';	
 	private $client = null;
@@ -53,7 +53,7 @@ class I10ManutencaoApiSdk
 	/**
 	 * @param string $baseUrl
 	 * @param string $accessToken
-	 * @return \GuzzleHttp\Client\ClientInterface
+	 * @return \GuzzleHttp\ClientInterface
 	 */
 	private function createClient($baseUrl = null, $accessToken = null)
 	{

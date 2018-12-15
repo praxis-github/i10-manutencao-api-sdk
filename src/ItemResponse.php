@@ -1,5 +1,7 @@
 <?php
 
+namespace Praxis\I10ManutencaoApiSdk;
+
 class ItemResponse
 {
 	private $data;

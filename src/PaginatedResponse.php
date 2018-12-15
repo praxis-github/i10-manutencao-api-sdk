@@ -1,5 +1,6 @@
 <?php
 
+namespace Praxis\I10ManutencaoApiSdk;
 class PaginatedResponse
 {
 	private $data;

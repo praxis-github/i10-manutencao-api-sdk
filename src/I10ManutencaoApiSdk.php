@@ -2,8 +2,6 @@
 
 namespace Praxis\I10ManutencaoApiSdk;
 
-require_once "vendor/autoload.php";
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\GuzzleException;

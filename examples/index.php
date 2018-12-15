@@ -19,6 +19,6 @@ $resource = 'systems';
 
 var_dump(
 	$sdk->login($alias, $login, $password)
-		->index('systems', $requestData)
+		->index($resource, $requestData)
 		->toPaginatedResponse()
 );

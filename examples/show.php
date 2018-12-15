@@ -13,6 +13,6 @@ $resource = 'systems';
 
 var_dump(
 	$sdk->login($alias, $login, $password)
-		->show('systems', $id)
+		->show($resource, $id)
 		->toItemResponse()
 );

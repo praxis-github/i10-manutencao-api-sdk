@@ -17,6 +17,6 @@ $payload = [
 
 var_dump(
 	$sdk->login($alias, $login, $password)
-		->store('systems', $payload)
+		->store($resource, $payload)
 		->toItemResponse()
 );

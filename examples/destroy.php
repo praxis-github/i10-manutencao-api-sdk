@@ -13,6 +13,6 @@ $resource = 'systems';
 
 var_dump(
 	$sdk->login($alias, $login, $password)
-		->destroy('systems', $id)
+		->destroy($resource, $id)
 		->toItemResponse()
 );

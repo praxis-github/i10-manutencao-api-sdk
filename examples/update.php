@@ -19,6 +19,6 @@ $payload = [
 
 var_dump(
 	$sdk->login($alias, $login, $password)
-		->update('systems', $id, $payload)
+		->update($resource, $id, $payload)
 		->toItemResponse()
 );

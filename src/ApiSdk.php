@@ -200,20 +200,20 @@ class ApiSdk
 	 * @param array $headers
 	 * @return I10ManutencaoApiSdk
 	 */
-	public function store($endpoint, array $payload = [], array $headers = [])
+	public function store($endpoint, array $payload = [], array $headers = [], bool $isApplicationJson = true)
 	{
 		try {
 			$response = $this->client->post(
 				$endpoint,
 				[
-					'body' => json_encode($payload),
+					'body' => $isApplicationJson ? json_encode($payload) : $payload,
 					'headers' => array_merge(
 						[
 							'Content-Type' => 'application/json'
 						],
 						$headers
 					)
-				]				
+				]
 			);	
 		} catch (ClientException $e) {
 			$statusCode = $e->getResponse()->getStatusCode();            

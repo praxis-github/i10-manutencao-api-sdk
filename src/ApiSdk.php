@@ -200,7 +200,7 @@ class ApiSdk
 	 * @param array $headers
 	 * @return I10ManutencaoApiSdk
 	 */
-	public function store($endpoint, array $payload = [], array $headers = [], bool $isApplicationJson = true)
+	public function store($endpoint, array $payload = [], array $headers = [], $isApplicationJson = true)
 	{
 		try {
 			$response = $this->client->post(
